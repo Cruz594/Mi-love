@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestra historia 💕</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffc1cc, #ffe4ec);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    margin-top: 50px;
+    color: #fff;
+    font-size: 3em;
+    text-shadow: 3px 3px 8px rgba(0,0,0,0.2);
+    animation: fadeDown 1s ease;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Galería de tarjetas */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    margin: 40px auto;
+    width: 90%;
+    max-width: 800px;
+  }
+
+  .card {
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .inner {
+    position: relative;
+    width: 100%;
+    padding-top: 120%; /* proporción cuadrada */
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .flipped {
+    transform: rotateY(180deg);
+  }
+
+  .front, .back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    backface-visibility: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+  }
+
+  .front {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff4b5c;
+    font-size: 1em;
+    padding: 15px;
+    font-weight: 500;
+    transition: transform 0.3s;
+  }
+
+  .front:hover {
+    transform: scale(1.05);
+  }
+
+  .back {
+    transform: rotateY(180deg);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+
+  /* Audio sorpresa */
+  #audioButton {
+    background: #fff;
+    color: #ff4b5c;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 25px;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: background 0.3s;
+    margin-bottom: 40px;
+  }
+
+  #audioButton:hover {
+    background: #ffe6ea;
+  }
+
+  #audioSurprise {
+    display: none;
+    background: rgba(255,255,255,0.95);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 20;
+    text-align: center;
+  }
+
+  #audioSurprise h3 {
+    color: #ff4b5c;
+    margin-bottom: 10px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255,255,255,0.9);
+    color: #ff4b5c;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    background: #ffccd5;
+  }
+
+  /* Corazones animados */
+  #hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  .heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Red_heart.svg/1024px-Red_heart.svg.png') no-repeat center/contain;
+    animation: floatUp 8s linear infinite;
+    opacity: 0.8;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.6); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>Nuestra historia 💞</h1>
+  <audio id="mainMusic" src="musica.mpeg" autoplay loop></audio>
+
+  <div class="gallery" id="gallery"></div>
+  <button id="audioButton" onclick="showAudioSurprise()">🎧 Audio sorpresa</button>
+
+  <div id="audioSurprise">
+    <button class="close-btn" onclick="closeAudioSurprise()">×</button>
+    <h3>😅🤭 Esto es solo para ti 😅🤭</h3>
+    <audio id="surpriseAudio" controls autoplay>
+      <source src="audio_sorpresa.ogg" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <div id="hearts"></div>
+
+  <script>
+    const frases = [
+      "Y asi sin decirnos nada, con una simple mirada comenzo nuestro amor 💫",
+      "Tus ojos, mi lugar favorito 💖",
+      "Riendo a tu lado no pido nada más",
+      "Nadie como tu, ternura fuego y amor 💐",
+      "Sin permiso me robaste el corazón... ✨",
+      "Cada abrazo es un hogar 🧸",
+      "Un viaje a la felicidad contigo ✈️",
+      "Te amo 3 millones 💕",
+      "Por siempre tú, sin importar dónde 🌙",
+      "Que me gustas, que te amo, que te quiero entre mis brazos para siempre 💞",
+      "Eres parte importante de mi vida 🌟",
+      "Me encanta tu midad y esa forma de hablarme 😍"
+    ];
+
+    const mainMusic = new Audio("musica.mpeg");
+    const specialSong = new Audio("cancion1.mpeg");
+    mainMusic.volume = 0.5;
+
+    window.addEventListener("load", () => {
+      mainMusic.play().catch(() => {
+        document.body.addEventListener("click", () => mainMusic.play(), { once: true });
+      });
+    });
+
+    // Crear las tarjetas
+    const gallery = document.getElementById("gallery");
+    frases.forEach((frase, i) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="inner" id="card${i+1}">
+          <div class="front">${frase}</div>
+          <div class="back"><img src="foto${i+1}.jpeg" alt="foto${i+1}"></div>
+        </div>
+      `;
+      gallery.appendChild(card);
+
+      card.addEventListener("click", () => flipCard(i+1));
+    });
+
+    function flipCard(num) {
+      const inner = document.getElementById("card" + num);
+      const isFlipped = inner.classList.contains("flipped");
+      document.querySelectorAll(".inner").forEach(c => c.classList.remove("flipped"));
+      if (!isFlipped) inner.classList.add("flipped");
+
+      // canción especial solo para la tarjeta 5
+      if (num === 5) {
+        if (!isFlipped) {
+          mainMusic.pause();
+          specialSong.currentTime = 0;
+          specialSong.play();
+        } else {
+          specialSong.pause();
+          mainMusic.play();
+        }
+      } else {
+        specialSong.pause();
+        mainMusic.play();
+      }
+    }
+
+    function showAudioSurprise() {
+      document.getElementById("audioSurprise").style.display = "block";
+      mainMusic.pause();
+    }
+
+    function closeAudioSurprise() {
+      document.getElementById("audioSurprise").style.display = "none";
+      document.getElementById("surpriseAudio").pause();
+      mainMusic.play();
+    }
+
+    // Corazones flotantes
+    const heartsContainer = document.getElementById("hearts");
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (6 + Math.random() * 4) + "s";
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+    setInterval(createHeart, 400);
+  </script>
+</body>
+</html>
